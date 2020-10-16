@@ -23,7 +23,7 @@
             //tframe.src = "https://mobile.weather.gov/index.php"
         }
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(success);
+            navigator.geolocation.getCurrentPosition(success, error);
         }
         else {
             error();
