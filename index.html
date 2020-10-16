@@ -1,0 +1,27 @@
+<html>
+<head>
+    <link rel="icon" href="https://mobile.weather.gov/images/nwslogo.gif" />
+  	<meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="apple-touch-startup-image" href="https://mobile.weather.gov/images/iphonestartupRetina.png" />
+	<link rel="apple-touch-icon" href="https://mobile.weather.gov/images/touch-icon-iphone.png" />
+	<link rel="apple-touch-icon" sizes="72x72" href="https://mobile.weather.gov/images/touch-icon-ipad.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://mobile.weather.gov/images/touch-icon-iphone4.png" />
+	<title>NWS Mobile Weather</title> 
+</head>
+<body style="margin: 0px;">
+    <iframe id="frame" src="https://mobile.weather.gov/index.php" width="100%" height="100%" style="width: 100%; height:100%; border: 0px;"></iframe>
+    <script type="text/javascript">
+        tframe = document.getElementById("frame");
+        function success(position){
+            tframe.src = "https://mobile.weather.gov/index.php?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude
+        }
+        function error(){
+            tframe.src = "https://mobile.weather.gov/index.php"
+        }
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, error);
+        }
+    </script>
+</body>
+</html>
