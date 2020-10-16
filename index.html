@@ -14,13 +14,19 @@
     <script type="text/javascript">
         tframe = document.getElementById("frame");
         function success(position){
-            tframe.src = "https://mobile.weather.gov/index.php?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude
+            tframe.src = "https://mobile.weather.gov/index.php?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude;
         }
         function error(){
-            tframe.src = "https://mobile.weather.gov/index.php"
+            if (confirm("An error occured while fetching location!\nThis could be due to insufficient permissions or a lack of location capability.  It would be recommended to go to https://mobile.weather.gov/ and to bookmark that after you've gone to the homepage for your location.  That way, everytime you visit the bookmark you won't have to input your location. Would you like to go there?")){
+                window.location.replace("https://mobile.weather.gov/index.php");
+            }
+            //tframe.src = "https://mobile.weather.gov/index.php"
         }
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(success, error);
+            navigator.geolocation.getCurrentPosition(success);
+        }
+        else {
+            error();
         }
     </script>
 </body>
