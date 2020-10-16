@@ -17,7 +17,7 @@
             tframe.src = "https://mobile.weather.gov/index.php?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude;
         }
         function error(){
-            if (confirm("An error occured while fetching your location!\nThis could be due to insufficient permissions or your browser lacking the ability to provide location to websites.  It would be recommended to visit https://mobile.weather.gov/ and to bookmark the page for your location.  That way everytime you visit the bookmark, you won't have to input your location.  Would you like to go there now?")){
+            if (confirm("An error occurred while fetching your location!\nThis problem could be due to insufficient permissions or your browser lacking the ability to provide your current location to websites.  It would be encouraged to visit https://mobile.weather.gov/ and to bookmark the page for your current location instead of this page.  That way, every time you visit the bookmark, you won't have to input your location.  Would you like to go there now?")){
                 window.location.replace("https://mobile.weather.gov/index.php");
             }
             //tframe.src = "https://mobile.weather.gov/index.php"
