@@ -13,19 +13,24 @@
 <body style="margin: 0px;">
     <iframe id="frame" src="http://my-cats.gq/?i=1" width="100%" height="100%" style="width: 100%; height:100%; border: 0px;"></iframe>
     <script type="text/javascript">
-        if (!getCookie("ReturningCustomer") || getVarParse()["ReturningCustomer"]) {
-            alert("Please bookmark this page before continuing!")
-            setCookie("ReturningCustomer", "Totally Rad Dude!", 365000)
+	if (getVarParse()["ReturningCustomer"]) {
+	    deleteCookie("ReturningCustomer");
+	    window.location.replace("https://spacesaver.github.io/AutoWeather/index.html");
+	}
+        if (!getCookie("ReturningCustomer")) {
+            alert("Please bookmark this page before continuing!");
+            setCookie("ReturningCustomer", "Totally Rad Dude!", 365000);
         }
         else{
             //tframe = document.getElementById("frame");
+	    setCookie("ReturningCustomer", "Totally Rad Dude!", 365000);
             function success(position){
                 //tframe.src = "https://mobile.weather.gov/index.php?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude;
                 window.location.replace("https://mobile.weather.gov/index.php?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude);
             }
             function error(){
                 if (confirm("An error occurred while fetching your location!\nThis problem could be due to insufficient permissions or your browser lacking the ability to provide your current location to websites.  It would be encouraged to visit https://mobile.weather.gov/ and to bookmark the page for your current location instead of this page.  That way, every time you visit the bookmark, you won't have to input your location.  Would you like to go there now?")){
-                    window.location.replace("https://mobile.weather.gov/index.php");
+                    window.location.href("https://mobile.weather.gov/index.php");
                 }
                 //tframe.src = "https://mobile.weather.gov/index.php"
             }
