@@ -23,16 +23,38 @@
                 setCookie("ReturningCustomer", "Totally Rad Dude!", 365000);
             }
             else{
+		if (!getCookie("Mobile")) {
+		    if (confirm("Is this a mobile device?")) {
+		        setCookie("Mobile", "1", 365000)
+		    }
+		    else {
+		        setCookie("Mobile", "0", 365000)
+		    }
+		    var mobile = (getCookie("Mobile") == "1")
+		else {
+		    var mobile = (getCookie("Mobile") == "1")
                 //tframe = document.getElementById("frame");
                 setCookie("ReturningCustomer", "Totally Rad Dude!", 365000);
+		setCookie("Mobile", getCookie("Mobile"), 365000)
                 function success(position){
                     //tframe.src = "https://mobile.weather.gov/index.php?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude;
-                    window.location.replace("https://mobile.weather.gov/index.php?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude);
+		    if (mobile) {
+                        window.location.replace("https://mobile.weather.gov/index.php?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude);
+		    }
+		    else {
+			window.location.replace("https://forecast.weather.gov/MapClick.php?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude);
+		    }
                 }
                 function error(){
-                    if (confirm("An error occurred while fetching your location!\nThis problem could be due to insufficient permissions or your browser lacking the ability to provide your current location to websites.  It would be encouraged to visit https://mobile.weather.gov/ and to bookmark the page for your current location instead of this page.  That way, every time you visit the bookmark, you won't have to input your location.  Would you like to go there now?")){
-                        window.location.href("https://mobile.weather.gov/index.php");
+		    if (mobile) {
+			if (confirm("An error occurred while fetching your location!\nThis problem could be due to insufficient permissions or your browser lacking the ability to provide your current location to websites.  It would be encouraged to visit https://mobile.weather.gov/ and to bookmark the page for your current location instead of this page.  That way, every time you visit the bookmark, you won't have to input your location.  Would you like to go there now?")){
+                            window.location.href("https://mobile.weather.gov/index.php");
+			}
                     }
+		    else {
+		        if (confirm("An error occurred while fetching your location!\nThis problem could be due to insufficient permissions or your browser lacking the ability to provide your current location to websites.  It would be encouraged to visit https://weather.gov/ and to bookmark the page for your current location instead of this page.  That way, every time you visit the bookmark, you won't have to input your location.  Would you like to go there now?")){
+		            window.location.href("https://weather.gov/")
+			}
                     //tframe.src = "https://mobile.weather.gov/index.php"
                 }
                 if (navigator.geolocation) {
