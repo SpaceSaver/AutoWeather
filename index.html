@@ -11,8 +11,15 @@
     <script src="ultimate-cookie-and-path-vars-pkg.js"></script>
 </head>
 <body style="margin: 0px;">
-    <iframe id="frame" src="https://spacesaver.github.io/My-Cat/index.html" width="100%" height="100%" style="width: 100%; height:100%; border: 0px;"></iframe>
+    <iframe id="frame" src="https://spacesaver.github.io/My-Cat/index.html" width="100%" height="100%" style="width: 100vw; height:95vh; border: 0px;"></iframe>
+    <p style="width: 100vw; height: 5vh; margin: 0; text-align: center; font-size:2vmin">This site or product includes IP2Location LITE data available from <a href="http://www.ip2location.com">http://www.ip2location.com</a>.<br>We use it when the browser location api fails.</p>
     <script type="text/javascript">
+        function find(check, data) {
+            for (let x = 0; x < data.length; x++) {
+                if (check(data[x])) return x;
+            }
+            return -1;
+        }
         if (getVarParse()["ReturningCustomer"] || getVarParse()["Mobile"]) {
             deleteCookie("ReturningCustomer");
             deleteCookie("Mobile")
@@ -50,16 +57,31 @@
                         }
                     }
                     function error(){
-                        if (mobile) {
-                            if (confirm("An error occurred while fetching your location!\nThis problem could be due to insufficient permissions or your browser lacking the ability to provide your current location to websites.  It would be encouraged to visit https://mobile.weather.gov/ and to bookmark the page for your current location instead of this page.  That way, every time you visit the bookmark, you won't have to input your location.  Would you like to go there now?")){
-                                window.location.href = "https://mobile.weather.gov/index.php";
-                            }
-                        }
-                        else {
-                            if (confirm("An error occurred while fetching your location!\nThis problem could be due to insufficient permissions or your browser lacking the ability to provide your current location to websites.  It would be encouraged to visit https://weather.gov/ and to bookmark the page for your current location instead of this page.  That way, every time you visit the bookmark, you won't have to input your location.  Would you like to go there now?")){
-                                window.location.href = "https://weather.gov/";
-                            }
-                        }
+                        fetch("https://www.ip2location.com/download/?token=EoGfaKMA3KJD5xwapEqWaaH6wISEUtj7fkc8kBpHIcwqi21wa0sYbkWAtgthsip8&file=5").then(res => {
+                            res.text().then(text => {
+                                data = JSON.parse("[[" + text.substring(0, text.length-1).replaceAll("\n", "],[").substring(0, ) + "]]");
+                                fetch("https://icanhazip.com").then(ipdat => {
+                                    ipdat.text().then(rawip => {
+                                        const ip = rawip.split(".");
+                                        const ipnum = 16777216*parseInt(ip[0]) + 65536*parseInt(ip[1]) + 256*parseInt(ip[2]) + parseInt(ip[3]);
+                                        const ipObj = data[find(info => {
+                                            return (parseInt(info[0]) <= ipnum && ipnum <= parseInt(info[1]));
+                                        }, data)]; //6 is lat, 7 is long
+                                        success({coords: {longitude: ipObj[7], latitude: ipObj[6]}});
+                                    });
+                                });
+                            });
+                        });
+                        // if (mobile) {
+                        //     if (confirm("An error occurred while fetching your location!\nThis problem could be due to insufficient permissions or your browser lacking the ability to provide your current location to websites.  It would be encouraged to visit https://mobile.weather.gov/ and to bookmark the page for your current location instead of this page.  That way, every time you visit the bookmark, you won't have to input your location.  Would you like to go there now?")){
+                        //         window.location.href = "https://mobile.weather.gov/index.php";
+                        //     }
+                        // }
+                        // else {
+                        //     if (confirm("An error occurred while fetching your location!\nThis problem could be due to insufficient permissions or your browser lacking the ability to provide your current location to websites.  It would be encouraged to visit https://weather.gov/ and to bookmark the page for your current location instead of this page.  That way, every time you visit the bookmark, you won't have to input your location.  Would you like to go there now?")){
+                        //         window.location.href = "https://weather.gov/";
+                        //     }
+                        // }
                     }
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(success, error);
